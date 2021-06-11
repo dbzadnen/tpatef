@@ -1,0 +1,4 @@
+500  bruh1          
+200  bruh2          
+700  bruh3            
+850  bruh4          

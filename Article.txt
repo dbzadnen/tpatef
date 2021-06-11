@@ -1,0 +1,4 @@
+100  yaghourt       PF   5000      20   5    
+200  lait           MP   2000      50   3    
+700  poudre         MP   2500      20   7    
+500  arome          MP   1200      50   9    
