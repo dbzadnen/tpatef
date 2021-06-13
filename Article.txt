@@ -1,4 +1,11 @@
-100  yaghourt       PF   5000      20   5    
-200  lait           MP   2000      50   3    
-700  poudre         MP   2500      20   7    
-500  arome          MP   1200      50   9    
+100  yaghourt       PF   50        20   50    
+200  lait           MP   30        50   30    
+700  poudre         MP   25        20   70    
+10   hlib           MP   12        50   10    
+20   rajom          MP   45        50   20    
+430  yaghor         MP   64        50   50    
+431  makloub        MP   23        50   20    
+433  pizza          MP   23        60   10    
+300  arome          MP   12        50   40   
+701  libanais       MP   10        50   50    
+500  ehlm           MP   60        50   10     
