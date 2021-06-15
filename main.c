@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<string.h>
 
-//definitions :
+//def :
 typedef struct article ARTICLE;
 typedef struct famille FAMILLE;
 typedef struct fournisseur FOURNISSEUR;
@@ -57,12 +57,6 @@ struct arbre_procede{
     ARBRE_PROCEDE* frere;
 };
 //API Fournisseur :
-/*FOURNISSEUR* creerFournisseur(int code , char raison_social[]){
-    FOURNISSEUR* f = (FOURNISSEUR*)malloc(sizeof(FOURNISSEUR*));
-    f->code = code;
-    strcpy(f->raison_social,raison_social);
-    return f;
-}*/
 LIST_FOURNISSEUR* creerListFournisseur(FOURNISSEUR fournisseur){
     LIST_FOURNISSEUR* lf = (LIST_FOURNISSEUR*) malloc(sizeof(LIST_FOURNISSEUR));
     lf->next = NULL;
@@ -80,10 +74,14 @@ void loadListFournisseur(char* inputs,LIST_FOURNISSEUR** liste_des_fournisseurs 
     insereListFournisseur(liste_des_fournisseurs,f);
 }
 void loadAllFournisseur(char* file_name,LIST_FOURNISSEUR** liste_des_fournisseurs ){
+    //Charger du Fichier
+    *liste_des_fournisseurs = NULL;
     FILE* fp = fopen(file_name,"r");
-    char ligne[100];
-    while(fgets(ligne,100,fp)){
-        loadListFournisseur(ligne,liste_des_fournisseurs);
+    if(fp){
+        char ligne[100];
+        while(fgets(ligne,100,fp)){
+            loadListFournisseur(ligne,liste_des_fournisseurs);
+        }
     }
     fclose(fp);
 }
@@ -100,16 +98,6 @@ void freeListFournisseur(LIST_FOURNISSEUR* f){
     }
 }
 // API article 
-/*ARTICLE* creerArticle (int code , char designation[] , char code_famille[] ,float prix_achat,int code_fournisseur,int quantite_en_stock){
-    ARTICLE* f = (ARTICLE*)malloc(sizeof(ARTICLE*));
-    f->code = code;
-    strcpy(f->designation, designation);
-    f->prix_achat =prix_achat;
-    strcpy(f->code_famille,code_famille);
-    f->code_fournisseur =code_fournisseur;
-    f->quantite_en_stock =quantite_en_stock;
-    return f;
-}*/
 LIST_ARTICLE* creerListArticle(ARTICLE article){
     LIST_ARTICLE* la = (LIST_ARTICLE*) malloc(sizeof(LIST_ARTICLE));
     la->next = NULL;
@@ -133,11 +121,15 @@ void loadListArticle(char* inputs,LIST_ARTICLE** liste_des_articles ){
     insereListArticle(liste_des_articles,a);
 }
 void loadAllArticle(char* file_name,LIST_ARTICLE** liste_des_articles ){
+    //Charger du Fichier
+    *liste_des_articles = NULL;
     FILE* fp = fopen(file_name,"r");
-    char ligne[100];
-    while(fgets(ligne,100,fp)){
-        //printf("%s",ligne);
-        loadListArticle(ligne,liste_des_articles);
+    if(fp){
+        char ligne[100];
+        while(fgets(ligne,100,fp)){
+            //printf("%s",ligne);
+            loadListArticle(ligne,liste_des_articles);
+        }
     }
     fclose(fp);
 }
@@ -156,12 +148,6 @@ LIST_ARTICLE* findListArticle(LIST_ARTICLE* ls,int code){
     return NULL;
 }
 // API famille 
-/*FAMILLE*  creerFamille (int code , char designation[]){
-    FAMILLE* f = (FAMILLE*)malloc(sizeof(FAMILLE*));
-    f->code = code;
-    strcpy(f->designation,designation);
-    return f;
-}*/
 LIST_FAMILLE* creerListFamille(FAMILLE famille){
     LIST_FAMILLE* lf = (LIST_FAMILLE*) malloc(sizeof(LIST_FAMILLE));
     lf->next = NULL;
@@ -179,10 +165,14 @@ void loadListFamille(char* inputs,LIST_FAMILLE** liste_des_familles ){
     insereListFamille(liste_des_familles,f);
 }
 void loadAllFamille(char* file_name,LIST_FAMILLE** liste_des_familles ){
+    //Charger du Fichier
+    *liste_des_familles = NULL;
     FILE* fp = fopen(file_name,"r");
-    char ligne[100];
-    while(fgets(ligne,100,fp)){
-        loadListFamille(ligne,liste_des_familles);
+    if(fp){
+        char ligne[100];
+        while(fgets(ligne,100,fp)){
+            loadListFamille(ligne,liste_des_familles);
+        }
     }
     fclose(fp);
 }
@@ -198,7 +188,6 @@ void freeListFamille(LIST_FAMILLE* f){
         free(f);
     }
 }
-
 //API procede :
     //API Arbre
 ARBRE_PROCEDE* creerArbreProcede (PROCEDE p){
@@ -248,6 +237,8 @@ void loadProcede(char* inputs,ARBRE_PROCEDE** racine){
     insereArbreProcede(d,racine);
 }
 void construireArbreProcede(char* file_name ,ARBRE_PROCEDE** racine){
+    //Charger du Fichier
+    *racine = NULL;
     FILE* fp = fopen(file_name,"r");
     char ligne[100];
     while(fgets(ligne,100,fp)){
@@ -271,8 +262,7 @@ void viewArbreProcede(ARBRE_PROCEDE* racine){
         viewArbreProcede(racine->frere);
     }
 }
-
-    //API list procede : 
+//API list procede : 
 LIST_PROCEDE* creerListProcede(PROCEDE p){
     LIST_PROCEDE* lf = (LIST_PROCEDE*) malloc(sizeof(LIST_PROCEDE));
     lf->next = NULL;
@@ -304,7 +294,7 @@ void freeListProcede(LIST_PROCEDE* f){
         free(f);
     }
 }
-//Problem Functions :
+//Fontions selon les Choix  :
 void besoinEnProduit(ARBRE_PROCEDE* racine,LIST_PROCEDE** ls,int quantite){
     if(racine){
         besoinEnProduit(racine->frere,ls,quantite);
@@ -322,15 +312,17 @@ void besoinEnProduit(ARBRE_PROCEDE* racine,LIST_PROCEDE** ls,int quantite){
         }
     }
 }
-int findMpEtPrix(ARBRE_PROCEDE* racine,LIST_ARTICLE* articles,int code){
+int findMpEtPrix(ARBRE_PROCEDE* racine,LIST_ARTICLE* articles,int code,int affichage){
     ARBRE_PROCEDE* produit = seekArbreProcede(racine,code);
     if(produit){
-        printf("------------Produit : %d\n",produit->d.code);
+        if(affichage)
+            printf("------------Produit : %d\n",produit->d.code);
         LIST_PROCEDE* ls = NULL;
         besoinEnProduit(produit->fils,&ls,produit->d.quantite);
-        LIST_PROCEDE* iterator = ls;
         float prixTotal = 0;
+        LIST_PROCEDE* iterator = ls;
         for(iterator;iterator;iterator = iterator->next){
+            if(affichage)
             printf("Code Matiere Premiere : %d ---- Quantite : %d \n",iterator->d.code,iterator->d.quantite);
             prixTotal =  prixTotal +  findListArticle(articles,iterator->d.code)->data.prix_achat * (iterator->d.quantite);
         }
@@ -341,16 +333,15 @@ int findMpEtPrix(ARBRE_PROCEDE* racine,LIST_ARTICLE* articles,int code){
     }
     return 0;
 }
-void showPfCout(ARBRE_PROCEDE* racine,LIST_ARTICLE* articles){
+void showPfCout(ARBRE_PROCEDE* racine,LIST_ARTICLE* articles,int affichage){
     printf("\nTous les PF :\n");
     while(racine){
         LIST_ARTICLE* current = findListArticle(articles,racine->d.code);
         printf("\nProduit Final : %s , Details : \n",current->data.designation);
-        findMpEtPrix(racine,articles,racine->d.code);
+        findMpEtPrix(racine,articles,racine->d.code,affichage);
         racine = racine->frere;
     }
     printf("--------------FIN\n");
-
 }
 void showFournisseurProduction(LIST_FOURNISSEUR* lf,ARBRE_PROCEDE* racine,LIST_ARTICLE* la){
     printf("-------Details Fournisseur : \n");
@@ -374,12 +365,14 @@ void showFournisseurProduction(LIST_FOURNISSEUR* lf,ARBRE_PROCEDE* racine,LIST_A
 void programmeDeProduction(ARBRE_PROCEDE* arbre,LIST_ARTICLE* ls ){
     int produit,quantite;
     LIST_PROCEDE* besoin = NULL;
+    // Data reading
     do{
         printf("Produit et besoin en quantite :\n");
         scanf("%d %d",&produit,&quantite);
         if(produit && quantite)
         besoinEnProduit(seekArbreProcede(arbre,produit)->fils,&besoin,quantite);
     }while(produit || quantite);
+    //Programme de production :
     printf("------------Programme De Production :\n");
     printf("Matiere     Besoin     Stock     Manquant\n");
     int faisable = 0;
@@ -414,14 +407,13 @@ void freeMemory(ARBRE_PROCEDE* racine,LIST_FAMILLE* liste_des_familles,LIST_FOUR
 }
 //MAIN
 void main(){
-    ARBRE_PROCEDE* arbre= NULL;
-    LIST_FAMILLE* liste_des_familles = NULL;
-    LIST_FOURNISSEUR* liste_des_fournisseurs = NULL;
-    LIST_ARTICLE* liste_des_articles = NULL;
-   // LIST_PROCEDE* matiere_premieres = NULL;
-   loadFiles(&arbre,&liste_des_familles,&liste_des_fournisseurs,&liste_des_articles,"Article.txt","Famille.txt","Fournisseur.txt","Procede.txt");
-   int choix = -1,code = -1;
-   do{
+    ARBRE_PROCEDE* arbre;
+    LIST_FAMILLE* liste_des_familles ;
+    LIST_FOURNISSEUR* liste_des_fournisseurs ;
+    LIST_ARTICLE* liste_des_articles ;
+    loadFiles(&arbre,&liste_des_familles,&liste_des_fournisseurs,&liste_des_articles,"Article.txt","Famille.txt","Fournisseur.txt","Procede.txt");
+    int choix = -1,code = -1;
+    do{
     printf("\n ****************** MENU ******************\n");
     printf("Choix 1 : Composition et cout d'un article\n");
     printf("Choix 2 : Resume de la composition des produits finis\n");
@@ -434,10 +426,10 @@ void main(){
         case 1:
             printf("Donnez le code de l'article desirer :\n");
             scanf("%d",&code);
-            findMpEtPrix(arbre,liste_des_articles,code);
+            findMpEtPrix(arbre,liste_des_articles,code,1);
             break;
         case 2:
-            showPfCout(arbre,liste_des_articles);
+            showPfCout(arbre,liste_des_articles,0);
             break;
         case 3:
             showFournisseurProduction(liste_des_fournisseurs,arbre,liste_des_articles);
@@ -453,3 +445,4 @@ void main(){
    }while(choix);
    freeMemory(arbre,liste_des_familles,liste_des_fournisseurs,liste_des_articles);
 }
+//FIN
